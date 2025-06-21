@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include <bits/stdc++.h>
 using std::vector;
 
 bool IsUnusedBox(vector<vector<int>>&sudokuMat, int startCol, int startRow, int n)
@@ -17,11 +18,11 @@ bool IsUnusedBox(vector<vector<int>>&sudokuMat, int startCol, int startRow, int 
     return true;
 }
 
-bool IsUnusedRow(vector<vector<int>>&sudokuMat, int row, int n)
+bool IsUnusedRow(vector<vector<int>>&sudokuMat, int col, int n)
 {
     for(int i = 0; i < 9; i++)
     {
-        if(sudokuMat[i][row] == n)
+        if(sudokuMat[col][i] == n)
         {
             return false;
         }
@@ -29,11 +30,11 @@ bool IsUnusedRow(vector<vector<int>>&sudokuMat, int row, int n)
     return true;
 }
 
-bool IsUnusedCol(vector<vector<int>>&sudokuMat, int col, int n)
+bool IsUnusedCol(vector<vector<int>>&sudokuMat, int row, int n)
 {
     for(int i = 0; i < 9; i++)
     {
-        if(sudokuMat[col][i] == n)
+        if(sudokuMat[i][row] == n)
         {
             return false;
         }
@@ -60,8 +61,8 @@ void BlockFill(vector<vector<int>> &sudokuMat, int col, int row)
         {
             do
             {
-                n = rand() % 9 + 1;
-            } while (IsUnusedBox(sudokuMat, col, row, n));
+                n = (rand() % 9) + 1;
+            } while (!IsUnusedBox(sudokuMat, col, row, n));
             sudokuMat[row + i][col + j] = n;  
         }
     }
@@ -104,10 +105,34 @@ bool FillRemaining(vector<vector<int>> &sudokuMat, int i, int j)
             sudokuMat[i][j] = 0;
         }
     }
+    return false;
+}
+
+void PrintMat(vector<vector<int>> mat)
+{
+    for (const auto &row : mat) {
+        for (int cell : row) {
+            std::cout << cell << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+vector<vector<int>> GenerateMat()
+{
+
+    vector<vector<int>> Mat(9, vector<int>(9,0));
+    FillDiagonal(Mat);
+    FillRemaining(Mat,0,0);
+    return Mat;
 }
 
 int main()
 {
+    srand(time(0));
 
+    vector<vector<int>> sudoku = GenerateMat();
+    PrintMat(sudoku);
+    
     return 0;
 }
