@@ -3,7 +3,7 @@
 #include <bits/stdc++.h>
 using std::vector;
 
-bool IsUnusedBox(vector<vector<int>>&sudokuMat, int startCol, int startRow, int n)
+bool IsUnusedBox(vector<vector<int>>&sudokuMat, int startRow, int startCol, int n)
 {
     for(int i = 0; i < 3; i++)
     {
@@ -18,11 +18,11 @@ bool IsUnusedBox(vector<vector<int>>&sudokuMat, int startCol, int startRow, int 
     return true;
 }
 
-bool IsUnusedRow(vector<vector<int>>&sudokuMat, int col, int n)
+bool IsUnusedRow(vector<vector<int>>&sudokuMat, int i, int n)
 {
-    for(int i = 0; i < 9; i++)
+    for(int k = 0; k < 9; k++)
     {
-        if(sudokuMat[col][i] == n)
+        if(sudokuMat[i][k] == n)
         {
             return false;
         }
@@ -30,11 +30,11 @@ bool IsUnusedRow(vector<vector<int>>&sudokuMat, int col, int n)
     return true;
 }
 
-bool IsUnusedCol(vector<vector<int>>&sudokuMat, int row, int n)
+bool IsUnusedCol(vector<vector<int>>&sudokuMat, int j, int n)
 {
-    for(int i = 0; i < 9; i++)
+    for(int k = 0; k < 9; k++)
     {
-        if(sudokuMat[i][row] == n)
+        if(sudokuMat[k][j] == n)
         {
             return false;
         }
@@ -42,9 +42,9 @@ bool IsUnusedCol(vector<vector<int>>&sudokuMat, int row, int n)
     return true;
 }
 
-bool CelSafe(vector<vector<int>>&sudokuMat, int row, int col, int n)
+bool CelSafe(vector<vector<int>>&sudokuMat, int i, int j, int n)
 {
-    if(IsUnusedBox(sudokuMat, row - row % 3, col - col % 3, n) && IsUnusedCol(sudokuMat, col, n) && IsUnusedRow(sudokuMat, row, n))
+    if(IsUnusedBox(sudokuMat, i - i % 3, j - j % 3, n) && IsUnusedCol(sudokuMat, j, n) && IsUnusedRow(sudokuMat, i, n))
     {
         return true;
     }
@@ -52,7 +52,7 @@ bool CelSafe(vector<vector<int>>&sudokuMat, int row, int col, int n)
     else return false;
 }
 
-void BlockFill(vector<vector<int>> &sudokuMat, int col, int row)
+void BlockFill(vector<vector<int>> &sudokuMat, int row, int col)
 {
     int n;
     for(int i = 0; i < 3; i++)
@@ -62,13 +62,13 @@ void BlockFill(vector<vector<int>> &sudokuMat, int col, int row)
             do
             {
                 n = (rand() % 9) + 1;
-            } while (!IsUnusedBox(sudokuMat, col, row, n));
+            } while (!IsUnusedBox(sudokuMat, row, col, n));
             sudokuMat[row + i][col + j] = n;  
         }
     }
 }
 
-void FillDiagonal(vector<vector<int>>&sudokuMat)
+void FillDiagonal(vector<vector<int>> &sudokuMat)
 {
     for(int i = 0; i < 9; i += 3)
     {
@@ -76,45 +76,68 @@ void FillDiagonal(vector<vector<int>>&sudokuMat)
     }
 }
 
-bool FillRemaining(vector<vector<int>> &sudokuMat, int i, int j)
-{
-    if(i == 9)
+bool FillRemaining(vector<vector<int>> &grid, int i, int j) {
+    
+    if (i == 9) 
     {
         return true;
     }
+
+    if (j == 9)
+    {
+        return FillRemaining(grid, i + 1, 0);
+    }
+
+    if (grid[i][j] != 0)
+    {
+        return FillRemaining(grid, i, j + 1);
+    }
     
-    if(j == 9)
+    for (int n = 1; n <= 9; n++) 
     {
-        return FillRemaining(sudokuMat, i + 1, 0);
-    }
-
-    if(sudokuMat[i][j] != 0)
-    {
-        return FillRemaining(sudokuMat, i, j + 1);
-    }
-
-    for(int n = 1; n <= 9; n++)
-    {
-        if(CelSafe(sudokuMat, i, j, n))
+        if (CelSafe(grid, i, j, n))
         {
-            sudokuMat[i][j] = n;
-            if(FillRemaining(sudokuMat, i, j + 1))
+            grid[i][j] = n;
+            if (FillRemaining(grid, i, j + 1))
             {
                 return true;
             }
-            sudokuMat[i][j] = 0;
+            grid[i][j] = 0; 
         }
     }
+    
     return false;
 }
 
 void PrintMat(vector<vector<int>> mat)
 {
-    for (const auto &row : mat) {
-        for (int cell : row) {
-            std::cout << cell << " ";
+    for(int i = 0; i < 9; i++)
+    {
+        if (i == 0)
+        {
+            std::cout << "\n-------------------------\n";
         }
-        std::cout << "\n";
+        for(int j = 0; j < 9; j++)
+        {
+            if(j == 0 || j % 3 ==0)
+            {
+                std::cout << "| ";
+            }
+            std::cout << mat[i][j] << " ";
+            if(j == 8)
+            {
+                std::cout << "| ";
+            } 
+        }
+        
+        if(i == 2 || i == 5 || i == 8)
+        {
+            std::cout << "\n-------------------------\n";
+        }
+        else 
+        {
+            std::cout << "\n";
+        }
     }
 }
 
