@@ -82,7 +82,7 @@ bool FillRemaining(vector<vector<int>> &sudokuMat, int i, int j)
     {
         return true;
     }
-
+    
     if(j == 9)
     {
         return FillRemaining(sudokuMat, i + 1, 0);
@@ -93,7 +93,7 @@ bool FillRemaining(vector<vector<int>> &sudokuMat, int i, int j)
         return FillRemaining(sudokuMat, i, j + 1);
     }
 
-    for(int n = 1; n < 9; n++)
+    for(int n = 1; n <= 9; n++)
     {
         if(CelSafe(sudokuMat, i, j, n))
         {
