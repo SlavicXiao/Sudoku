@@ -150,12 +150,31 @@ vector<vector<int>> GenerateMat()
     return Mat;
 }
 
+vector<vector<int>> RemoveDigits(vector<vector<int>> mat, int k)
+{
+    while(k > 0)
+    {
+        int cell = rand() % 81;
+        int i = cell / 9;
+        int j = cell % 9;
+
+        if(mat[i][j] != 0)
+        {
+            mat[i][j] = 0;
+            k--;
+        }
+    }
+
+    return mat;
+}
+
 int main()
 {
     srand(time(0));
 
     vector<vector<int>> sudoku = GenerateMat();
-    PrintMat(sudoku);
+    vector<vector<int>> playableSudoku = RemoveDigits(sudoku, 20);
+    PrintMat(playableSudoku);
     
     return 0;
 }
