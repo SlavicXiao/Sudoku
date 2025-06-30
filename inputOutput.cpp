@@ -1,5 +1,5 @@
 #include<vector>
-#include "vectorio.h"
+#include "inputOutput.h"
 #include <bits/stdc++.h>
 using std::vector;
 
@@ -54,16 +54,4 @@ void ValidInput(int& variable)
         std::cout << "Invalid input, please try again: ";
         std::cin >> variable;
     }
-}
-
-bool CompareVectors(vector<vector<int>> a, vector<vector<int>> b)
-{
-    for(int i = 0; i < 9; i++)
-    {
-        for(int j = 0; j < 9; j++)
-        {
-            if(a[i][j] != b[i][j]) return false;
-        }
-    }
-    return true;
 }

@@ -2,13 +2,14 @@
 #include<vector>
 #include<bits/stdc++.h>
 #include"sudoku.h"
-#include"vectorio.h"
+#include"inputOutput.h"
 using std::vector;
 
-void Menu()
+void Play()
 {   
     std::cout << "Sudoku\n\nChoose difficulty:\n\t(1)Easy\n\t(2)Medium\n\t(3)Hard\n\nChoice: ";
     int difficulty,k;
+
     ValidInput(difficulty);
     switch (difficulty)
     {
@@ -37,11 +38,11 @@ void Menu()
     vector<vector<int>> solvedSudoku = GenerateMat();
     vector<vector<int>> playableSudoku = RemoveDigits(solvedSudoku, k);
     
-    PrintMat(solvedSudoku);
     PrintMat(playableSudoku);
 
     int i,j,n;
-    while(CompareVectors(solvedSudoku, playableSudoku) == false)
+
+    while(IsSolved(playableSudoku) == false)
     {
         std::cout << "Choose column: ";
         ValidInput(i);
@@ -71,12 +72,22 @@ void Menu()
         }
     }
 
-    std::cout << "You win! ";
+    std::cout << "You win!\n";
     getchar();
 }
 
 int main()
 {
-    Menu();
+    Play();
+    
+    int choice;
+    do
+    {
+        std::cout << "Would you like to play again?\n(1 - yes / other - no)";
+        ValidInput(choice);
+        if(choice == 1) Play();
+
+    }while(choice == 1);
+
     return 0;
 }

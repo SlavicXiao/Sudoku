@@ -24,4 +24,6 @@ vector<vector<int>> GenerateMat();
 vector<vector<int>> RemoveDigits(vector<vector<int>> mat, int k);
 
 
+bool IsSolved(vector<vector<int>> &a);
+
 
